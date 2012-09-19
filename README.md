@@ -4,15 +4,11 @@ HTTP-based JSON API for basic interactions with the Event Stream Processor (ESP)
 
 ## Installation
 
-You need to have an instance of the ESP database set up and running somewhere. The ESP database currently expects version 8.4 or later of PostgreSQL. The SQL files for setting up the database are available here:
-
-    https://github.com/iPlantCollaborativeOpenSource/esp-database
+You need to have an instance of the ESP database set up and running somewhere. The ESP database currently expects version 8.4 or later of PostgreSQL. The SQL files for setting up the database are available here: https://github.com/iPlantCollaborativeOpenSource/esp-database
 
 Right now you need to run the files manually through psql, but automation for that is under development.
 
-To deploy esp-http itself, you're going to need Leiningen 2 and Immutant 0.3.0. Instructions on getting Immutant set up are available here:
-
-    http://immutant.org/tutorials/installation/index.html
+To deploy esp-http itself, you're going to need Leiningen 2 and Immutant 0.3.0. Instructions on getting Immutant set up are available here: http://immutant.org/tutorials/installation/index.html
 
 Once you have Immutant running (hint: use the Leiningen plugin for now), set up a config file for esp-http. To do that create a $HOME/.esp/esp-http.properties file and fill it in with the following options:
 
