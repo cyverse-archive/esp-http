@@ -2,7 +2,8 @@
   (:use esp-http.validate
         [slingshot.slingshot :only [try+ throw+]])
   (:require [clojure.data.json :as json]
-            [kameleon.esp-queries :as espq]))
+            [kameleon.esp-queries :as espq]
+            [immutant.xa :as xa]))
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
@@ -58,10 +59,11 @@
   (when-not (uuid? source-uuid) (bad-uuid source-uuid))
   (when-not (string? type) (bad-string "type" type))
   (when-not (map? data) (bad-data "data" data))
-  
-  (json/json-str
-   {:results
-    [(espq/insert-event (uuid) source-uuid type (json/json-str data))]}))
+
+  (xa/transaction
+   (json/json-str
+    {:results
+     [(espq/insert-event (uuid) source-uuid type (json/json-str data))]})))
 
 (defn add-event-source
   "Inserts a new event source into the database and returns the info for the

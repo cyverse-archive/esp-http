@@ -7,30 +7,18 @@
   (:require [immutant.messaging :as messaging]
             [immutant.web :as web]
             [immutant.utilities :as util]
+            [immutant.repl :as repl]
             [clojure.tools.logging :as log]))
 
-(def homedir (System/getProperty "user.home"))
-
-(defn get-properties
-  []
-  (let [dev-conf   (path-join homedir ".esp" "esp-http.properties")
-        local-conf "/etc/esp/esp-http.properties"]
-    (cond
-     (exists? dev-conf)   (read-properties dev-conf)
-     (exists? local-conf) (read-properties local-conf)
-     :else                (log/error "No config found."))))
-
 (init-config (get-properties))
+(init-db)
 
-(defdb pg
-  (postgres
-   {:db       (db-name)
-    :user     (db-user)
-    :password (db-password)
-    :host     (db-host)
-    :port     (db-port)}))
+;;;Make sure Korma closes DB connections cleanly at exit.
+;;;(util/at-exit #(.close (:datasource @korma.db/_default)))
 
 (web/start app)
+
+(repl/start-nrepl 3333)
 
 ;; Messaging allows for starting (and stopping) destinations (queues & topics)
 ;; and listening for messages on a destination.
